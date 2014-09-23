@@ -27,6 +27,8 @@ private slots:
 
     void on_coloredchessButton_clicked();
 
+    void on_imgButton_clicked();
+
 private:
     void testImage();
     void showMat(const cv::Mat& mat);

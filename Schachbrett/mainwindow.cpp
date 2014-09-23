@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <QFileDialog>
 using namespace cv;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -114,4 +115,32 @@ void MainWindow::on_coloredchessButton_clicked()
     }
 
     showMat(image);
+}
+
+void MainWindow::on_imgButton_clicked()
+{
+    QString imgage =  QFileDialog::getOpenFileName(this, tr("Open File"), "/", tr("Images (*.png *.xpm *.jpg)"));
+    std::string string = imgage.toStdString();
+    Mat mat = imread(string);
+    double width = mat.cols;
+    double height = mat.rows;
+    if(width >=400 || height >= 400){
+        if(width >= height){
+            double scaling = width / height;
+            double newHeight = (400 /scaling);
+            Mat scaledImage(height,width,mat.type());
+            cv::resize(mat,scaledImage,Size(400,newHeight));
+            showMat(scaledImage);
+        }
+        else{
+            double scaling = height / width;
+            double newWidth = 400 /scaling;
+            Mat scaledImage(height,width,mat.type());
+            cv::resize(mat,scaledImage,Size(newWidth,400));
+            showMat(scaledImage);
+        }
+    }
+    else{
+        showMat(mat);
+    }
 }
